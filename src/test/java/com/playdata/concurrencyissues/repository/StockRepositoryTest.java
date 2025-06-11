@@ -6,6 +6,7 @@ import com.playdata.concurrencyissues.entity.Stock;
 import com.playdata.concurrencyissues.service.LettuceLockFacade;
 import com.playdata.concurrencyissues.service.OptimisticLockFacade;
 import com.playdata.concurrencyissues.service.PessimisticLockStockService;
+import com.playdata.concurrencyissues.service.RedissonLockFacade;
 import com.playdata.concurrencyissues.service.StockService;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -35,6 +36,9 @@ class StockRepositoryTest {
 
     @Autowired
     private LettuceLockFacade lettuceLockFacade;
+
+    @Autowired
+    private RedissonLockFacade redissonLockFacade;
 
     // 각 테스트가 실행되기 전 이 메서드를 먼저 실행
     @BeforeEach
@@ -107,7 +111,7 @@ class StockRepositoryTest {
             ServerA.submit(() -> {
                 try {
                     System.out.println("서버 A 고객 " + customerId + "주문 시작");
-                    lettuceLockFacade.decrease(1L, 1L);
+                    redissonLockFacade.decrease(1L, 1L);
                     System.out.println("서버 A 고객 " + customerId + "주문 완료");
                 } catch (Exception e) {
                     System.out.println("서버 A 고객 " + customerId + "주문 실패");
@@ -123,7 +127,7 @@ class StockRepositoryTest {
             ServerB.submit(() -> {
                 try {
                     System.out.println("서버 B 고객 " + customerId + "주문 시작");
-                    lettuceLockFacade.decrease(1L, 1L);
+                    redissonLockFacade.decrease(1L, 1L);
                     System.out.println("서버 B 고객 " + customerId + "주문 완료");
                 } catch (Exception e) {
                     System.out.println("서버 B 고객 " + customerId + "주문 실패");
