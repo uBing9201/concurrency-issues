@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: concurrency-issues
+  datasource:
+    url: jdbc:mysql://localhost:3306/concurrency?serverTimezone=Asia/Seoul
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    jpa:
+      database: mysql
+      database-platform: org.hibernate.dialect.MySQLDialect
+      hibernate:
+        ddl-auto: create
+      show-sql: true
+
+
